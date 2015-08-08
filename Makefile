@@ -7,16 +7,16 @@ INC =
 
 .PHONY: test
 
-test:
-	$(CC) -o test/test test/test.cc
-	./test/test
-
 all: $(EXE)
 
 clean:
 	rm -f *~ *.o core $(EXE)
 	rm -rf *.dSYM
 	rm test/test
+
+test:
+	$(CC) -o test/test test/test.cc
+	./test/test
 
 $(EXE): % : %.o $(OBJ)
 	$(CC) $(CFLAGS) $@.o -o $@ $(OBJ) $(LDFLAGS)

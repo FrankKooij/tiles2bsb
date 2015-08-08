@@ -3,13 +3,15 @@
 #include "catch.h"
 #include "../tiles.h"
 
-unsigned int Factorial( unsigned int number ) {
-    return number <= 1 ? number : Factorial(number-1)*number;
-}
+// TILES::fromCoordinate
+TEST_CASE( "Map a coordinate with a zoomlevel to X and Y tiles", "[fromCoordinate]" ) {
 
-TEST_CASE( "Factorials are computed", "[factorial]" ) {
-    REQUIRE( Factorial(1) == 1 );
-    REQUIRE( Factorial(2) == 2 );
-    REQUIRE( Factorial(3) == 6 );
-    REQUIRE( Factorial(10) == 3628800 );
+	double lat = 51.272376;
+	double lon = 6.271966;
+
+	Tiles t;
+	std::pair<int, int> xy = t.fromCoordinate(10, lon, lat);
+
+    REQUIRE( xy.first == 529 );
+    REQUIRE( xy.second == 341 );
 }
