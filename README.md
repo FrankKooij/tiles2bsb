@@ -9,3 +9,4 @@ Scrapes a tileserver and outputs the result in BSB format which is typically use
 * https://github.com/nlohmann/json
 * http://opencpn.de/handbuecher/elektronische-seekarten-selbst-erstellen
 * http://opencpn.org/ocpn/chart_conversion_linux
+* http://www.dacust.com/inlandwaters/imgkap/
