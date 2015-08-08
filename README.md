@@ -1,4 +1,4 @@
-# tiles2bsb
+# tiles2bsb [![Build Status](https://travis-ci.org/thomasbrueggemann/tiles2bsb.svg?branch=master)](https://travis-ci.org/thomasbrueggemann/tiles2bsb)
 Scrapes a tileserver and outputs the result in BSB format which is typically used for nautical charts navigation software
 
 ### Resources
