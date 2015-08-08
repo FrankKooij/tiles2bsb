@@ -29,6 +29,7 @@
 
 # Binaries
 tiles2bsb
+test/test
 
 # SublimeText
 *.sublime*
