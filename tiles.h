@@ -1,3 +1,15 @@
+// ---------------------------------------------------------------------------
+// This software is in the public domain, furnished "as is", without technical
+// support, and with no warranty, express or implied, as to its usefulness for
+// any purpose.
+//
+// TILES.H
+// Tiles class can map geocoordinates to x and y coordinates, given a certain
+// zoomlevel in order to open ZXY tiles from tileservers.
+//
+// Author: Thomas Brüggemann
+// ---------------------------------------------------------------------------
+
 #ifndef TILES_H
 #define TILES_H
 

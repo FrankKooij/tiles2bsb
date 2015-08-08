@@ -4,7 +4,8 @@
 #include "../tiles.h"
 
 // TILES::fromCoordinate
-TEST_CASE( "Map a coordinate with a zoomlevel to X and Y tiles", "[fromCoordinate]" ) {
+TEST_CASE( "Map a coordinate with a zoomlevel to X and Y tiles", "[fromCoordinate]") 
+{
 
 	double lat = 51.272376;
 	double lon = 6.271966;

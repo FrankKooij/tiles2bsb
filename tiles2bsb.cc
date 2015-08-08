@@ -1,3 +1,15 @@
+// ---------------------------------------------------------------------------
+// This software is in the public domain, furnished "as is", without technical
+// support, and with no warranty, express or implied, as to its usefulness for
+// any purpose.
+//
+// TILES2BSB.CC
+// Main program to transform a range of tiles from a tileserver into a BSB
+// formatted .cap/.kap file for usage in nautical charts navigation software
+//
+// Author: Thomas Brüggemann
+// ---------------------------------------------------------------------------
+
 #include <iostream>
 #include <utility>
 
