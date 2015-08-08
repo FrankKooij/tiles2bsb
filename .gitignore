@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Binaries
+tiles2bsb
+
+# SublimeText
+*.sublime*
