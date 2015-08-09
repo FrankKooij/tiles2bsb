@@ -38,3 +38,5 @@ tiles/*.tif
 
 # SublimeText
 *.sublime*
+
+config.log
