@@ -16,6 +16,7 @@
 #include "tiles.hpp"
 #include "fetch.hpp"
 #include "image.hpp"
+#include "bsb.hpp"
 #include "elapsed.hpp"
 #include "crayons.hpp"
 
@@ -58,6 +59,9 @@ int main()
     // display stats
 	double stitchingMs = e.End();
 	std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
+
+	BSB b;
+	bool result = b.fromTiff("tiles/map.tif");
 
   	return 0;
 }

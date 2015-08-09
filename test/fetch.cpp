@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include "catch.hpp"
 #include "../fetch.hpp"
 
 // Fetch::fromUrl

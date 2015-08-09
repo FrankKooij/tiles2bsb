@@ -1,5 +1,5 @@
 
-//#include "catch.hpp"
+#include "catch.hpp"
 #include "../bsb.hpp"
 
 TEST_CASE("Convert a tiff to bsb kap file", "[fromTiff]") 

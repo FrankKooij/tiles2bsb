@@ -1,3 +1,4 @@
+#include "catch.hpp"
 #include "../tiles.hpp"
 
 // Tiles::fromCoordinate
