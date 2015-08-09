@@ -98,7 +98,9 @@ inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
             curl_easy_strerror(res));
     }
 
-	return out.str();
+    // return the resulting content
+    std::string content(out.str());
+	return content;
 };
 
 // SAVE FROM URL
