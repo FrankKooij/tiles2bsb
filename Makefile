@@ -15,7 +15,7 @@ clean:
 	rm test/test
 
 test:
-	$(CC) $(CFLAGS) -o test/test test/test.cpp $(LDFLAGS)
+	$(CC) -o test/test test/test.cpp $(LDFLAGS)
 	./test/test
 
 $(EXE): % : %.o $(OBJ)
