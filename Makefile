@@ -1,6 +1,6 @@
 CC	= g++
 CFLAGS	= -Wall -g -std=c++11 -v
-LDFLAGS	= 
+LDFLAGS	= -lcurl
 EXE = tiles2bsb
 OBJ = 
 INC = 

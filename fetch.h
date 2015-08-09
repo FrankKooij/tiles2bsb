@@ -12,8 +12,8 @@
 #ifndef FETCH_H
 #define FETCH_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 class Fetch
 {
