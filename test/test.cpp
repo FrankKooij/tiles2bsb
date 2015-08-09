@@ -3,3 +3,4 @@
 #include "catch.hpp"
 #include "fetch.cpp"
 #include "tiles.cpp"
+#include "image.cpp"

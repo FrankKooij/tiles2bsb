@@ -37,8 +37,7 @@ TEST_CASE("Map a bounding box to XY coordinates", "[fromBoundingBox]")
 	Coordinate bottomRight(6.282084, 51.267595);
 
 	Tiles t;
+	TilesResult result = t.fromBoundingBox(16, topLeft, bottomRight);
 
-	std::vector<XY> tiles = t.fromBoundingBox(16, topLeft, bottomRight);
-
-	REQUIRE( tiles.size() == 20 );
+	REQUIRE( result.coordinates.size() == 20 );
 }

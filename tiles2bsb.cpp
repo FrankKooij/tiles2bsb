@@ -36,9 +36,9 @@ int main()
 	Fetch f;
 
 	// find XY coordinates
-	std::vector<XY> tiles = t.fromBoundingBox(zoom, topLeft, bottomRight);
+	TilesResult tiles = t.fromBoundingBox(zoom, topLeft, bottomRight);
 
-	for(XY xy : tiles) 
+	for(XY xy : tiles.coordinates) 
 	{
 		// download each of these tiles
 		f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.first, xy.second, "tiles/{z}_{x}_{y}.png");
@@ -46,7 +46,7 @@ int main()
 
 	// display stats
 	double downloadMs = e.End();
-	std::cout << GREY << "Download of " << tiles.size() <<  " tiles ran " << downloadMs << "ms" << DEFAULT << std::endl;
+	std::cout << GREY << "Download of " << tiles.coordinates.size() <<  " tiles ran " << downloadMs << "ms" << DEFAULT << std::endl;
 
   	return 0;
 }

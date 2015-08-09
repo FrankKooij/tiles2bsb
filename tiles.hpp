@@ -20,6 +20,16 @@
 typedef std::pair<double, double> Coordinate;
 typedef std::pair<int, int> XY;
 
+// TILES RESULT
+class TilesResult
+{
+public:
+	std::vector<XY> coordinates;
+	int width;
+	int height;
+};
+
+// TILES
 class Tiles
 {
 private:
@@ -29,7 +39,7 @@ private:
 public:
 	inline XY fromCoordinate(int zoom, Coordinate coord);
 	inline XY fromCoordinate(int zoom, double lon, double lat);
-	inline std::vector<XY> fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight);
+	inline TilesResult fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight);
 };
 
 // LONG 2 TILE X
@@ -65,7 +75,7 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 };
 
 // FROM BOUNDING BOX
-inline std::vector<XY> Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight)
+inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight)
 {
 	// map bounding box coordinates to xy
 	XY topLeftXY = this->fromCoordinate(zoom, topLeft);
@@ -85,7 +95,13 @@ inline std::vector<XY> Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coor
 		}
 	}
 
-	return results;
+	// merge everything together in a tiles result object
+	TilesResult tilesResult;
+	tilesResult.coordinates = results;
+	tilesResult.width = abs(topLeftXY.first - bottomRightXY.first) + 1;
+	tilesResult.height = abs(topLeftXY.second - bottomRightXY.second) + 1;
+
+	return tilesResult;
 };
 
 #endif

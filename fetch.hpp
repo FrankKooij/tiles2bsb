@@ -20,16 +20,7 @@
 #include <iostream>
 #include <string>
 
-namespace patch
-{
-    template < typename T > std::string to_string( const T& n )
-    {
-        std::ostringstream stm ;
-        stm << n ;
-        return stm.str() ;
-    }
-}
-
+#include "patches.hpp"
 
 size_t writeData(void *ptr, size_t size, size_t nmemb, void *stream) 
 {
@@ -84,9 +75,9 @@ inline bool Fetch::replace(std::string& str, const std::string& from, const std:
 inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
 {
 	// replace the zoom, x and y parameters to the url
-	this->replace(url, "{z}", patch::to_string(zoom));
-	this->replace(url, "{x}", patch::to_string(x));
-	this->replace(url, "{y}", patch::to_string(y));
+	this->replace(url, "{z}", patches::to_string(zoom));
+	this->replace(url, "{x}", patches::to_string(x));
+	this->replace(url, "{y}", patches::to_string(y));
 
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
@@ -122,9 +113,9 @@ inline bool Fetch::saveFromUrl(std::string url, int zoom, int x, int y, std::str
 	std::string content = this->fromUrl(url, zoom, x, y);
 
 	// replace the zoom, x and y parameters to the filename
-	this->replace(fileName, "{z}", patch::to_string(zoom));
-	this->replace(fileName, "{x}", patch::to_string(x));
-	this->replace(fileName, "{y}", patch::to_string(y));
+	this->replace(fileName, "{z}", patches::to_string(zoom));
+	this->replace(fileName, "{x}", patches::to_string(x));
+	this->replace(fileName, "{y}", patches::to_string(y));
 
 	// write to file
 	std::ofstream os(fileName.c_str());
