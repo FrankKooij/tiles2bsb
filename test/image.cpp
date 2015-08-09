@@ -1,5 +1,5 @@
 
-#include "catch.hpp"
+//#include "catch.hpp"
 #include "../image.hpp"
 
 TEST_CASE("Fetch 20 tiles from a bounding box and store them in /tiles direcotry", "[stitchTogether]") 
