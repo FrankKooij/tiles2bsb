@@ -127,9 +127,15 @@ inline bool Fetch::saveFromUrl(std::string url, int zoom, int x, int y, std::str
 	this->replace(fileName, "{y}", patch::to_string(y));
 
 	// write to file
-	std::ofstream out(fileName);
-    out << content;
-    out.close();
+	std::ofstream os(fileName);
+
+    if(!os)
+    {
+        return false;
+    }
+
+    os << content;
+    os.close();
 
     return true;
 };
