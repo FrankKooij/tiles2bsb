@@ -15,7 +15,7 @@ clean:
 	rm test/test
 
 test:
-	$(CC) -o test/test test/test.cc
+	$(CC) $(CFLAGS) -o test/test test/test.cc $(LDFLAGS)
 	./test/test
 
 $(EXE): % : %.o $(OBJ)
