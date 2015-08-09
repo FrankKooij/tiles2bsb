@@ -14,9 +14,10 @@ clean:
 	rm -rf *.dSYM
 	rm test/test
 	rm tiles/*.png
+	rm tiles/*.jpg
 
 test:
-	$(CC) -std=c++11 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/usr/local/include/ImageMagick-6 -o test/test test/test.cpp $(LDFLAGS)
+	$(CC) -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/usr/local/include/ImageMagick-6 -o test/test test/test.cpp $(LDFLAGS)
 	./test/test
 
 $(EXE): % : %.o $(OBJ)
