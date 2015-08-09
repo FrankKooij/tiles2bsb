@@ -1,4 +1,5 @@
 language: cpp
+sudo: required
 
 compiler:
   - g++
@@ -8,7 +9,7 @@ before_install:
   - tar -zxf pkgconfig.tgz
   - cd pkg-config-0.28
   - ./configure --with-internal-glib 
-  - make install
+  - sudo make install
 
 script:
   - make test
