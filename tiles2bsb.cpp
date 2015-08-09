@@ -26,6 +26,7 @@ int main()
 	std::cout << "=== TILES-2-BSB v1.0 ===" << std::endl;
 	Elapsed e; e.Start();
 
+	// init bounding box
 	Coordinate topLeft(6.265175, 51.282414);
 	Coordinate bottomRight(6.282084, 51.267595);
 
@@ -34,6 +35,7 @@ int main()
 	Tiles t;
 	Fetch f;
 
+	// find XY coordinates
 	std::vector<XY> tiles = t.fromBoundingBox(zoom, topLeft, bottomRight);
 
 	for(XY xy : tiles) 
@@ -42,6 +44,7 @@ int main()
 		f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.first, xy.second, "tiles/{z}_{x}_{y}.png");
 	}
 
+	// display stats
 	double downloadMs = e.End();
 	std::cout << GREY << "Download of " << tiles.size() <<  " tiles ran " << downloadMs << "ms" << DEFAULT << std::endl;
 

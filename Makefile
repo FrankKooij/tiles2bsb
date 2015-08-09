@@ -1,6 +1,6 @@
 CC	= g++
 CFLAGS	= -Wall -g -std=c++11 -v
-LDFLAGS	= -lcurl
+LDFLAGS	= -lcurl `Magick++-config --cppflags --cxxflags --ldflags --libs`
 EXE = tiles2bsb
 OBJ = 
 INC = 
