@@ -15,6 +15,7 @@
 
 #include "tiles.hpp"
 #include "fetch.hpp"
+#include "image.hpp"
 #include "elapsed.hpp"
 #include "crayons.hpp"
 
@@ -47,6 +48,16 @@ int main()
 	// display stats
 	double downloadMs = e.End();
 	std::cout << GREY << "Download of " << tiles.coordinates.size() <<  " tiles ran " << downloadMs << "ms" << DEFAULT << std::endl;
+
+	e.Start();
+
+	// stitch images together
+    Image i;
+    i.stitchTogether(tiles, zoom, "tiles/map.tif");
+
+    // display stats
+	double stitchingMs = e.End();
+	std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
 
   	return 0;
 }

@@ -84,11 +84,11 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	std::vector<XY> results;
 
 	// loop the x values from left to right
-	for(int x = topLeftXY.first; x <= bottomRightXY.first; x++) 
+	for(int y = topLeftXY.second; y <= bottomRightXY.second; y++) 
 	{
 		// loop the y values from top to bottom
-		for(int y = topLeftXY.second; y <= bottomRightXY.second; y++) {
-
+		for(int x = topLeftXY.first; x <= bottomRightXY.first; x++) 
+		{
 			// add XY coordinate to results vector
 			XY xyValue(x, y);
 			results.push_back(xyValue);

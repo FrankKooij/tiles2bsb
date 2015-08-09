@@ -27,5 +27,5 @@ TEST_CASE("Fetch 20 tiles from a bounding box and store them in /tiles direcotry
 
     // stitch images together
     Image i;
-    i.stitchTogether(tiles, zoom, "tiles/map.png");
+    i.stitchTogether(tiles, zoom, "tiles/map.tif");
 }

@@ -34,6 +34,7 @@ test/test
 
 # Tiles
 tiles/*.png
+tiles/*.tif
 
 # SublimeText
 *.sublime*

@@ -24,8 +24,15 @@ class Image
 private:
 
 public:
+	Image();
 	inline bool stitchTogether(TilesResult tiles, int zoom, std::string fileName);
 };
+
+// CONSTRUCTOR
+Image::Image()
+{
+	Magick::InitializeMagick("");
+}
 
 // STITCH TOGETHER
 inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileName)
@@ -59,7 +66,7 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
     Magick::montageImages( &montagelist, sourceImageList.begin(), sourceImageList.end(), montageSettings);
 
     // This will give the expected result
-    Magick::writeImages(montagelist.begin(), montagelist.end(), fileName);
+   	Magick::writeImages(montagelist.begin(), montagelist.end(), fileName);
 
 	return true;
 }
