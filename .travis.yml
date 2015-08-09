@@ -10,6 +10,7 @@ before_install:
   - cd pkg-config-0.28
   - ./configure --with-internal-glib 
   - sudo make install
+  - cd ../tiles2bsb
 
 script:
   - make test
