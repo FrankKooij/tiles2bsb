@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../fetch.h"
+#include "../fetch.hpp"
 
 // Fetch::fromUrl
 TEST_CASE("Fetch an tile image from url", "[fromUrl]") 

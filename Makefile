@@ -15,11 +15,11 @@ clean:
 	rm test/test
 
 test:
-	$(CC) $(CFLAGS) -o test/test test/test.cc $(LDFLAGS)
+	$(CC) $(CFLAGS) -o test/test test/test.cpp $(LDFLAGS)
 	./test/test
 
 $(EXE): % : %.o $(OBJ)
 	$(CC) $(CFLAGS) $@.o -o $@ $(OBJ) $(LDFLAGS)
 
-%.o: %.cc $(INC)
+%.o: %.cpp $(INC)
 	$(CC) $(CFLAGS) -c $<

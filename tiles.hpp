@@ -10,8 +10,8 @@
 // Author: Thomas Brüggemann
 // ---------------------------------------------------------------------------
 
-#ifndef TILES_H
-#define TILES_H
+#ifndef TILES_HPP
+#define TILES_HPP
 
 #include <math.h>
 #include <utility>

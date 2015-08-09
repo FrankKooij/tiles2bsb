@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 
-#include "catch.h"
-#include "fetch.cc"
-#include "tiles.cc"
+#include "catch.hpp"
+#include "fetch.cpp"
+#include "tiles.cpp"

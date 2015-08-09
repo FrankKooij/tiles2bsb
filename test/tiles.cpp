@@ -1,4 +1,4 @@
-#include "../tiles.h"
+#include "../tiles.hpp"
 
 // Tiles::fromCoordinate
 TEST_CASE("Map a coordinate with a zoomlevel to X and Y tiles", "[fromCoordinate]") 

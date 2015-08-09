@@ -9,8 +9,8 @@
 // Author: Thomas Brüggemann
 // ---------------------------------------------------------------------------
 
-#ifndef FETCH_H
-#define FETCH_H
+#ifndef FETCH_HPP
+#define FETCH_HPP
 
 #include <curl/curl.h>
 #include <curl/easy.h>

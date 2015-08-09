@@ -13,7 +13,7 @@
 #include <iostream>
 #include <utility>
 
-#include "tiles.h"
+#include "tiles.hpp"
 
 int main()
 {
