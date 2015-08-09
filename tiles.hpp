@@ -3,7 +3,7 @@
 // support, and with no warranty, express or implied, as to its usefulness for
 // any purpose.
 //
-// TILES.H
+// TILES.HPP
 // Tiles class can map geocoordinates to x and y coordinates, given a certain
 // zoomlevel in order to open ZXY tiles from tileservers.
 //

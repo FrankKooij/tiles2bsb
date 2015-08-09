@@ -13,6 +13,7 @@ clean:
 	rm -f *~ *.o core $(EXE)
 	rm -rf *.dSYM
 	rm test/test
+	rm tiles/*.png
 
 test:
 	$(CC) -o test/test test/test.cpp $(LDFLAGS)

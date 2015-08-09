@@ -14,18 +14,36 @@
 #include <utility>
 
 #include "tiles.hpp"
+#include "fetch.hpp"
+#include "elapsed.hpp"
+#include "crayons.hpp"
+
+Crayon GREY(FG_LIGHT_GRAY);
+Crayon DEFAULT(FG_DEFAULT);
 
 int main()
 {
 	std::cout << "=== TILES-2-BSB v1.0 ===" << std::endl;
+	Elapsed e; e.Start();
 
-	double lat = 51.272376;
-	double lon = 6.271966;
+	Coordinate topLeft(6.265175, 51.282414);
+	Coordinate bottomRight(6.282084, 51.267595);
+
+	int zoom = 16;
 
 	Tiles t;
-	std::pair<int, int> xy = t.fromCoordinate(10, lon, lat);
+	Fetch f;
 
-	std::cout << "(" << xy.first << ", " << xy.second << ")" << std::endl;
+	std::vector<XY> tiles = t.fromBoundingBox(zoom, topLeft, bottomRight);
+
+	for(XY xy : tiles) 
+	{
+		// download each of these tiles
+		f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.first, xy.second, "tiles/{z}_{x}_{y}.png");
+	}
+
+	double downloadMs = e.End();
+	std::cout << GREY << "Download of " << tiles.size() <<  " tiles ran " << downloadMs << "ms" << DEFAULT << std::endl;
 
   	return 0;
 }

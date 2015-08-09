@@ -3,7 +3,7 @@
 // support, and with no warranty, express or implied, as to its usefulness for
 // any purpose.
 //
-// FETCH.H
+// FETCH.HPP
 // Fetch class is used to download a range of tiles from a tileserver
 //
 // Author: Thomas Brüggemann
@@ -34,7 +34,7 @@ namespace patch
 size_t writeData(void *ptr, size_t size, size_t nmemb, void *stream) 
 {
     std::string data((const char*) ptr, (size_t) size * nmemb);
-    *((std::stringstream*) stream) << data << std::endl;
+    *((std::stringstream*) stream) << data;
 
     return size * nmemb;
 }
@@ -110,8 +110,8 @@ inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
     }
 
     // return the resulting content
-    std::string content(out.str());
-	return content;
+    std::string result(out.str());
+	return result;
 };
 
 // SAVE FROM URL
