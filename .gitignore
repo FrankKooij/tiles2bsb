@@ -32,5 +32,8 @@
 tiles2bsb
 test/test
 
+# Tiles
+tiles/*.png
+
 # SublimeText
 *.sublime*
