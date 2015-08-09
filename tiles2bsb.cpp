@@ -17,7 +17,7 @@
 
 int main()
 {
-	std::cout << "=== TILES2BSB v1.0 ===" << std::endl;
+	std::cout << "=== TILES-2-BSB v1.0 ===" << std::endl;
 
 	double lat = 51.272376;
 	double lon = 6.271966;

@@ -17,6 +17,8 @@ TEST_CASE("Fetch an tile image from url and save the file to disc", "[saveFromUr
 	Fetch f;
 	bool result = f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", 14, 23, 45, "tiles/{z}_{x}_{y}.png");
 
+	REQUIRE( result == true );
+
 	std::ifstream infile("tiles/14_23_45.png");
     bool isGood = infile.good();
 
