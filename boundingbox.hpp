@@ -14,6 +14,8 @@
 #define BOUNDINGBOX_HPP
 
 #include "coordinate.hpp"
+#include "patches.hpp"
+#include <string>
 
 class BoundingBox
 {
@@ -24,6 +26,7 @@ public:
 	BoundingBox(Coordinate topLeft, Coordinate bottomRight);
 	Coordinate topLeft;
 	Coordinate bottomRight;
+	std::string toString();
 };
 
 // CONSTRUCTOR
@@ -37,6 +40,13 @@ BoundingBox::BoundingBox(Coordinate topLeft, Coordinate bottomRight)
 {
 	this->topLeft = topLeft;
 	this->bottomRight = bottomRight;
+};
+
+// TO STRING
+std::string BoundingBox::toString() 
+{
+	std::string result = "[" + topLeft.toString() + ", " + bottomRight.toString() + "]";
+	return result;
 };
 
 #endif

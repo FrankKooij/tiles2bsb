@@ -84,16 +84,16 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordinate> polygonPoints)
 {
 	// find center of polygon
-	
+
 
 	std::vector<TilesResult> results;
 	return results;
 };
 
 // FROM BOUNDING BOX
-inline TilesResult fromBoundingBox(int zoom, BoundingBox box)
+inline TilesResult Tiles::fromBoundingBox(int zoom, BoundingBox box)
 {
-	return this->fromBoundingBox(zoom, box->topLeft, box->bottomRight);
+	return this->fromBoundingBox(zoom, box.topLeft, box.bottomRight);
 };
 
 inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight)

@@ -84,7 +84,7 @@ inline Coordinate Polygon::getCentroid()
 };
 
 // GET COVERING RECTANGLES
-inline std::vector<BoundingBox> getCoveringRectangles()
+inline std::vector<BoundingBox> Polygon::getCoveringRectangles()
 {
 	std::vector<BoundingBox> results;
 
@@ -92,42 +92,140 @@ inline std::vector<BoundingBox> getCoveringRectangles()
 	Coordinate center = this->getCentroid();
 
 	// TOP RIGHT CORNER
-	std::vector<Coordinate> topRightCorner;
-
 	// find all points, that are within the top right corner
 	// from the centroid onwards
-	double maxLatitude = 0.0;
-	double maxLongitude = 0.0;
+	double maxLatitude = center.latitude;
+	double maxLongitude = center.longitude;
 
-	for(Coordinate point : this->coordinates)
+	for (Coordinate point : this->coordinates)
 	{
-		if (point.latitude >= center.latitude &&
-			point.longitude >= center.longitude)
+		if (point.latitude >= center.latitude && point.longitude >= center.longitude)
 		{
-			topRightCorner.push_back(point);
-
 			// set maximum latitude
-			if(maxLatitude >= point.latitude) 
+			if (point.latitude >= maxLatitude) 
 			{
 				maxLatitude = point.latitude;
 			}
 
 			// set maximum longitude
-			if(maxLongitude >= point.longitude)
+			if (point.longitude >= maxLongitude)
 			{
 				maxLongitude = point.longitude;
 			}
 		}
 	}
 
-	// calculate a bounding box for the top right corner
-	Coordinate trcTopLeft(center.longitude, maxLatitude);
-	Coordinate trcBottomRight(maxLongitude, center.latitude);
+	if (maxLongitude != 0.0 && maxLatitude != 0.0)
+	{
+		// calculate a bounding box for the top right corner
+		Coordinate trcTopLeft(center.longitude, maxLatitude);
+		Coordinate trcBottomRight(maxLongitude, center.latitude);
 
-	BoundingBox trcBox(trcTopLeft, trcBottomRight);
-	results.push_back(trcBack);
+		BoundingBox trcBox(trcTopLeft, trcBottomRight);
+		results.push_back(trcBox);
+	}
 
 	// BOTTOM RIGHT CORNER
+	// find all points, that are within the bottom right corner
+	// from the centroid onwards
+	maxLatitude = center.latitude;
+	maxLongitude = center.longitude;
+
+	for (Coordinate point : this->coordinates)
+	{
+		if (point.latitude <= center.latitude && point.longitude >= center.longitude)
+		{
+			// set maximum latitude
+			if (point.latitude <= maxLatitude) 
+			{
+				maxLatitude = point.latitude;
+			}
+
+			// set maximum longitude
+			if (point.longitude >= maxLongitude)
+			{
+				maxLongitude = point.longitude;
+			}
+		}
+	}
+
+	if (maxLongitude != 0.0 && maxLatitude != 0.0)
+	{
+		// calculate a bounding box for the bottom right corner
+		Coordinate brcTopLeft(center.longitude, center.latitude);
+		Coordinate brcBottomRight(maxLongitude, maxLatitude);
+
+		BoundingBox brcBox(brcTopLeft, brcBottomRight);
+		results.push_back(brcBox);
+	}
+
+	// BOTTOM LEFT CORNER
+	// find all points, that are within the bottom left corner
+	// from the centroid onwards
+	maxLatitude = center.latitude;
+	maxLongitude = center.longitude;
+
+	for (Coordinate point : this->coordinates)
+	{
+		if (point.latitude <= center.latitude && point.longitude <= center.longitude)
+		{
+			// set maximum latitude
+			if (point.latitude <= maxLatitude) 
+			{
+				maxLatitude = point.latitude;
+			}
+
+			// set maximum longitude
+			if (point.longitude <= maxLongitude)
+			{
+				maxLongitude = point.longitude;
+			}
+		}
+	}
+
+	if (maxLongitude != 0.0 && maxLatitude != 0.0)
+	{
+		// calculate a bounding box for the bottom left corner
+		Coordinate blcTopLeft(maxLongitude, center.latitude);
+		Coordinate blcBottomRight(center.longitude, maxLatitude);
+
+		BoundingBox blcBox(blcTopLeft, blcBottomRight);
+		results.push_back(blcBox);
+	}
+
+	// TOP LEFT CORNER
+	// find all points, that are within the top left corner
+	// from the centroid onwards
+	maxLatitude = center.latitude;
+	maxLongitude = center.longitude;
+
+	for (Coordinate point : this->coordinates)
+	{
+		if (point.latitude >= center.latitude && point.longitude <= center.longitude)
+		{
+			// set maximum latitude
+			if (point.latitude >= maxLatitude) 
+			{
+				maxLatitude = point.latitude;
+			}
+
+			// set maximum longitude
+			if (point.longitude <= maxLongitude)
+			{
+				maxLongitude = point.longitude;
+			}
+		}
+	}
+
+	if (maxLongitude != 0.0 && maxLatitude != 0.0)
+	{
+		// calculate a bounding box for the top left corner
+		Coordinate tlcTopLeft(maxLongitude, maxLatitude);
+		Coordinate tlcBottomRight(center.longitude, center.latitude);
+
+		BoundingBox tlcBox(tlcTopLeft, tlcBottomRight);
+		results.push_back(tlcBox);
+	}
 
 	return results;
 };
