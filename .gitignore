@@ -31,6 +31,7 @@
 # Binaries
 tiles2bsb
 test/test
+lib/imgkap
 
 # Tiles
 tiles/*.png

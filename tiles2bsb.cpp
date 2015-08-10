@@ -54,14 +54,14 @@ int main()
 
 	// stitch images together
     Image i;
-    i.stitchTogether(tiles, zoom, "tiles/map.tif");
+    i.stitchTogether(tiles, zoom, "tiles/map.png");
 
     // display stats
 	double stitchingMs = e.End();
 	std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
 
 	BSB b;
-	bool result = b.fromTiff("tiles/map.tif", "template.kap", "map.kap");
+	bool result = b.fromPNG("tiles/map.png", "map.kap", topLeft, bottomRight);
 
   	return 0;
 }

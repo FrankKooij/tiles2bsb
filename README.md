@@ -17,6 +17,7 @@ Scrapes a tileserver and outputs the result in BSB format which is typically use
 * http://opencpn.org/ocpn/chart_conversion_linux
 * http://www.dacust.com/inlandwaters/imgkap/
 * http://www.imagemagick.org/Magick++/
+* http://sourceforge.net/p/freeimage/discussion/36110/thread/7e436844/
 
 ## Tile Server
 
