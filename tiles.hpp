@@ -20,6 +20,12 @@
 #include "coordinate.hpp"
 #include "xy.hpp"
 
+namespace gtl = boost::polygon;
+using namespace boost::polygon::operators;
+
+typedef gtl::polygon_90_with_holes_data<int> Polygon;
+typedef gtl::polygon_traits<Polygon>::point_type Point;
+
 // TILES RESULT
 class TilesResult
 {
@@ -42,6 +48,7 @@ private:
 public:
 	inline XY fromCoordinate(int zoom, Coordinate coord);
 	inline XY fromCoordinate(int zoom, double lon, double lat);
+	inline std::vector<TilesResult> fromPolygon(int zoom, std::vector<Coordinate> polygonPoints);
 	inline TilesResult fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight);
 };
 
@@ -77,6 +84,16 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 	return result;
 };
 
+// FROM POLYGON
+inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordinate> polygonPoints)
+{
+	// construct boost polygon from polygon coordinates
+
+
+	std::vector<TilesResult> results;
+	return results;
+};
+
 // FROM BOUNDING BOX
 inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight)
 {
@@ -103,9 +120,10 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	// coordinate, but we must find the real lat/lon bounds of the tile in order
 	// to correctly compute a calibrated .cap file later
 	double exploreLeftLon = topLeft.longitude;
+	const double pumpingValue = 0.00000001;
 	XY exploreLeftX;
 	do {
-		exploreLeftLon -= 0.000001;
+		exploreLeftLon -= pumpingValue;
 		exploreLeftX = this->fromCoordinate(zoom, exploreLeftLon, topLeft.latitude);
 	}
 	while(exploreLeftX.x >= topLeftXY.x);
@@ -114,7 +132,7 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	double exploreLeftLat = topLeft.latitude;
 	XY exploreLeftY;
 	do {
-		exploreLeftLat += 0.000001;
+		exploreLeftLat += pumpingValue;
 		exploreLeftY = this->fromCoordinate(zoom, topLeft.longitude, exploreLeftLat);
 	}
 	while(exploreLeftY.y >= topLeftXY.y);
@@ -123,7 +141,7 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	double exploreRightLon = bottomRight.longitude;
 	XY exploreRightX;
 	do {
-		exploreRightLon += 0.000001;
+		exploreRightLon += pumpingValue;
 		exploreRightX = this->fromCoordinate(zoom, exploreRightLon, bottomRight.latitude);
 	}
 	while(bottomRightXY.x >= exploreRightX.x);
@@ -132,7 +150,7 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	double exploreRightLat = topLeft.latitude;
 	XY exploreRightY;
 	do {
-		exploreRightLat -= 0.000001;
+		exploreRightLat -= pumpingValue;
 		exploreRightY = this->fromCoordinate(zoom, bottomRight.longitude, exploreRightLat);
 	}
 	while(bottomRightXY.y >= exploreRightY.y);

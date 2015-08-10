@@ -1,8 +1,7 @@
 
-#include "catch.hpp"
 #include "../image.hpp"
 
-TEST_CASE("Stitch 20 tiles together to one tif file", "[stitchTogether]")
+TEST_CASE("Stich images together to one giant image", "[stitchTogether]")
 {
 	// init bounding box
 	Coordinate topLeft(6.265175, 51.282414);
