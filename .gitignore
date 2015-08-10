@@ -41,3 +41,4 @@ tiles/*.tif
 *.sublime*
 
 config.log
+*.kap

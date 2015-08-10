@@ -43,8 +43,8 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
     // loop all coordinates
     for(XY xy : tiles.coordinates)
     {
-    	std::string imageName = "tiles/" + patches::to_string(zoom) + "_" + patches::to_string(xy.first) + 
-    							"_" + patches::to_string(xy.second) + ".png";
+    	std::string imageName = "tiles/" + patches::to_string(zoom) + "_" + patches::to_string(xy.x) + 
+    							"_" + patches::to_string(xy.y) + ".png";
 
     	image.read(imageName);
     	sourceImageList.push_back(image);

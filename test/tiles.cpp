@@ -11,8 +11,8 @@ TEST_CASE("Map a coordinate with a zoomlevel to X and Y tiles", "[fromCoordinate
 	Tiles t;
 	std::pair<int, int> xy = t.fromCoordinate(10, lon, lat);
 
-    REQUIRE( xy.first == 529 );
-    REQUIRE( xy.second == 341 );
+    REQUIRE( xy.x == 529 );
+    REQUIRE( xy.y == 341 );
 }
 
 // Tiles::fromCoordinate
@@ -27,8 +27,8 @@ TEST_CASE("Map a coordinate object with a zoomlevel to X and Y tiles", "[fromCoo
 	Tiles t;
 	std::pair<int, int> xy = t.fromCoordinate(10, coord);
 
-    REQUIRE( xy.first == 529 );
-    REQUIRE( xy.second == 341 );
+    REQUIRE( xy.x == 529 );
+    REQUIRE( xy.y == 341 );
 }
 
 // Tiles::fromBoundingBox

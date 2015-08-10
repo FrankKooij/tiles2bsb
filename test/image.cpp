@@ -21,7 +21,7 @@ TEST_CASE("Stitch 20 tiles together to one tif file", "[stitchTogether]")
 	for(XY xy : tiles.coordinates) 
 	{
 		// download each of these tiles
-		bool isGood = f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.first, xy.second, "tiles/{z}_{x}_{y}.png");
+		bool isGood = f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.x, xy.y, "tiles/{z}_{x}_{y}.png");
 		REQUIRE( isGood == true );
 	}
 

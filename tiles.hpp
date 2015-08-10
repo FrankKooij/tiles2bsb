@@ -17,8 +17,8 @@
 #include <utility>
 #include <vector>
 
-typedef std::pair<double, double> Coordinate;
-typedef std::pair<int, int> XY;
+#include "coordinate.hpp"
+#include "xy.hpp"
 
 // TILES RESULT
 class TilesResult
@@ -27,6 +27,9 @@ public:
 	std::vector<XY> coordinates;
 	int width;
 	int height;
+
+	Coordinate topLeftEdge;
+	Coordinate bottomRightEdge;
 };
 
 // TILES
@@ -59,7 +62,7 @@ inline int Tiles::lat2TileY(double lat, int z)
 // FROM COORDINATE
 inline XY Tiles::fromCoordinate(int zoom, Coordinate coord)
 {
-	return this->fromCoordinate(zoom, coord.first, coord.second);
+	return this->fromCoordinate(zoom, coord.longitude, coord.latitude);
 };
 
 inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
@@ -69,7 +72,7 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 	int y = this->lat2TileY(lat, zoom);
 
 	// return the result
-	std::pair<int, int> result(x, y);
+	XY result(x, y);
 
 	return result;
 };
@@ -84,10 +87,10 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	std::vector<XY> results;
 
 	// loop the x values from left to right
-	for(int y = topLeftXY.second; y <= bottomRightXY.second; y++) 
+	for(int y = topLeftXY.y; y <= bottomRightXY.y; y++) 
 	{
 		// loop the y values from top to bottom
-		for(int x = topLeftXY.first; x <= bottomRightXY.first; x++) 
+		for(int x = topLeftXY.x; x <= bottomRightXY.x; x++) 
 		{
 			// add XY coordinate to results vector
 			XY xyValue(x, y);
@@ -95,11 +98,56 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 		}
 	}
 
+	// try to explore the left bound of longitude of the top left tile
+	// because we found the tile (x,y) coordinate, that hosts the given lat/lon
+	// coordinate, but we must find the real lat/lon bounds of the tile in order
+	// to correctly compute a calibrated .cap file later
+	double exploreLeftLon = topLeft.longitude;
+	XY exploreLeftX;
+	do {
+		exploreLeftLon -= 0.000001;
+		exploreLeftX = this->fromCoordinate(zoom, exploreLeftLon, topLeft.latitude);
+	}
+	while(exploreLeftX.x >= topLeftXY.x);
+
+	// explore top left latitude bound of tile
+	double exploreLeftLat = topLeft.latitude;
+	XY exploreLeftY;
+	do {
+		exploreLeftLat += 0.000001;
+		exploreLeftY = this->fromCoordinate(zoom, topLeft.longitude, exploreLeftLat);
+	}
+	while(exploreLeftY.y >= topLeftXY.y);
+
+	// explore bottom right longitude bound of tile
+	double exploreRightLon = bottomRight.longitude;
+	XY exploreRightX;
+	do {
+		exploreRightLon += 0.000001;
+		exploreRightX = this->fromCoordinate(zoom, exploreRightLon, bottomRight.latitude);
+	}
+	while(bottomRightXY.x >= exploreRightX.x);
+
+	// explore bottm right latitude bound of tile
+	double exploreRightLat = topLeft.latitude;
+	XY exploreRightY;
+	do {
+		exploreRightLat -= 0.000001;
+		exploreRightY = this->fromCoordinate(zoom, bottomRight.longitude, exploreRightLat);
+	}
+	while(bottomRightXY.y >= exploreRightY.y);
+
 	// merge everything together in a tiles result object
 	TilesResult tilesResult;
 	tilesResult.coordinates = results;
-	tilesResult.width = abs(topLeftXY.first - bottomRightXY.first) + 1;
-	tilesResult.height = abs(topLeftXY.second - bottomRightXY.second) + 1;
+	tilesResult.width = abs(topLeftXY.x - bottomRightXY.x) + 1;
+	tilesResult.height = abs(topLeftXY.y - bottomRightXY.y) + 1;
+
+	Coordinate topLeftEdge(exploreLeftLon, exploreLeftLat);
+	tilesResult.topLeftEdge = topLeftEdge;
+
+	Coordinate bottomRightEdge(exploreRightLon, exploreRightLat);
+	tilesResult.bottomRightEdge = bottomRightEdge;
 
 	return tilesResult;
 };

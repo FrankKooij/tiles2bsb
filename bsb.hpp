@@ -16,7 +16,7 @@
 #include <string>
 #include <stdlib.h>     /* system, NULL, EXIT_FAILURE */
 
-#include "tiles.hpp"
+#include "coordinate.hpp"
 #include "patches.hpp"
 
 class BSB
@@ -31,9 +31,9 @@ public:
 // FROM TIF
 inline bool BSB::fromPNG(std::string tiffPath, std::string capFileName, Coordinate topLeft, Coordinate bottomRight)
 {
-	std::string cmd = "lib/imgkap " + tiffPath + " " + patches::to_string(topLeft.second) + " " + 
-					  patches::to_string(topLeft.first) + " " + patches::to_string(bottomRight.second) + " " + 
-					  patches::to_string(bottomRight.first) + " " +  capFileName;
+	std::string cmd = "lib/imgkap " + tiffPath + " " + patches::to_string(topLeft.latitude) + " " + 
+					  patches::to_string(topLeft.longitude) + " " + patches::to_string(bottomRight.latitude) + " " + 
+					  patches::to_string(bottomRight.longitude) + " " +  capFileName;
 
 	std::cout << cmd << std::endl;
 

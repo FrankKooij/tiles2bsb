@@ -43,7 +43,7 @@ int main()
 	for(XY xy : tiles.coordinates) 
 	{
 		// download each of these tiles
-		f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.first, xy.second, "tiles/{z}_{x}_{y}.png");
+		f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.x, xy.y, "tiles/{z}_{x}_{y}.png");
 	}
 
 	// display stats
@@ -61,7 +61,7 @@ int main()
 	std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
 
 	BSB b;
-	bool result = b.fromPNG("tiles/map.png", "map.kap", topLeft, bottomRight);
+	bool result = b.fromPNG("tiles/map.png", "map.kap", tiles.topLeftEdge, tiles.bottomRightEdge);
 
   	return 0;
 }

@@ -1,6 +1,6 @@
 CC	= g++
-CFLAGS	= -Wall -Ofast -g -std=c++11 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/opt/ImageMagick/include/ImageMagick-6 -Ilib/libbsb -I/usr/local/include
-LDFLAGS	= -lcurl -L/opt/ImageMagick/lib -lMagick++-6.Q16 -lMagickCore-6.Q16 -Llib/libbsb -lbsb -L/usr/local/lib -ltiff
+CFLAGS	= -Wall -Ofast -g -std=c++11 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/opt/ImageMagick/include/ImageMagick-6 -I/usr/local/include
+LDFLAGS	= -lcurl -L/opt/ImageMagick/lib -lMagick++-6.Q16 -lMagickCore-6.Q16 -L/usr/local/lib -ltiff
 EXE = tiles2bsb
 OBJ = 
 INC = 
