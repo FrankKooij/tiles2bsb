@@ -22,6 +22,8 @@
 #include <tiffio.h>		/* libtiff - TIFF file I/O */
 #include <bsb.h>
 
+static int depth_for_colors[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
+
 class BSB
 {
 private:
@@ -29,7 +31,7 @@ private:
 	inline int countTiffColors(TIFF* tif, BSBImage *pImage, uint16_t bits_per_sample);
 
 public:
-	inline bool fromTiff(std::string path);
+	inline bool fromTiff(std::string tiffPath, std::string templatePath, std::string capFileName);
 };
 
 // READ 8 BPP TIFF LINE
@@ -110,7 +112,7 @@ inline int BSB::countTiffColors(TIFF* tif, BSBImage *pImage, uint16_t bits_per_s
 };
 
 // FROM TIF
-inline bool BSB::fromTiff(std::string path)
+inline bool BSB::fromTiff(std::string tiffPath, std::string templatePath, std::string capFileName)
 {
 	BSBImage	image;
 	int			i, j, arg_idx, depth = 0, num_colors = -1, *index;
@@ -122,10 +124,10 @@ inline bool BSB::fromTiff(std::string path)
 	char		line[1024];
 
 	// open tiff iamge
-	tif = TIFFOpen(path.c_str(), "rb");
+	tif = TIFFOpen(tiffPath.c_str(), "rb");
 	if (! tif)
 	{
-		fprintf(stderr, "Could not TIFFOpen \"%s\"\n", path.c_str());
+		fprintf(stderr, "Could not TIFFOpen \"%s\"\n", tiffPath.c_str());
 		return false;
 	}
 
@@ -178,7 +180,7 @@ inline bool BSB::fromTiff(std::string path)
 		return false;
 	}
 
-	/* The BSB format cannot cope with more than 128 colors */
+	// the BSB format cannot cope with more than 128 colors 
 	if (num_colors > 128)
 	{
 		fprintf(stderr, "Too many colors for BSB format (%d > 128 max.)\n", num_colors);
@@ -186,6 +188,86 @@ inline bool BSB::fromTiff(std::string path)
 		fprintf(stderr, "Or use -c max-colors to restrict the colormap to max-colors\n");
 		return false;
 	}
+
+	// given num_colors in input image, compute required "depth"
+	// e.g. num_colors=35, depth=6  (2^6 = 64)
+	for (i = 0; i < (int)sizeof(depth_for_colors); i++)
+	{
+		if (num_colors < depth_for_colors[i])
+			break;
+
+		depth = i + 1;
+	}
+	image.depth = depth;
+
+	// open cap file to write to
+	out = fopen(capFileName.c_str(), "wb");
+	if (!out)
+	{
+		perror(capFileName.c_str());
+		return false;
+	}
+
+	// copy in all text lines from template excluding RGB and IFM tags
+	tmpl_file = fopen(templatePath.c_str(), "rb");
+	while (fgets(line, sizeof(line), tmpl_file) != NULL)
+	{
+		if (strncmp("RGB/", line, 4) == 0)
+			continue;
+		if (strncmp("IFM/", line, 4) == 0)
+			continue;
+		if (line[0] == 0x1a)
+			break;
+		fputs(line, out);
+	}
+	fclose(tmpl_file);
+
+	// write IFM tag
+	fprintf(out, "IFM/%d\r\n", depth);
+
+	// write RGB tags for colormap
+	for (i = 0; i < num_colors; i++)
+	{
+		fprintf(out, "RGB/%d,%d,%d,%d\r\n",
+					i+1,
+					red[i] >> 8,
+					green[i] >> 8,
+					blue[i] >> 8
+					);
+	}
+	fputc(0x1a, out);
+	fputc('\0', out);
+	fputc(depth, out);
+
+	index = (int *)malloc((image.height + 1) * sizeof(int));
+	scratch = (uint8_t *)malloc(image.width + 8);	// max space encoded line can take
+
+	// read rows from tif, write to bsb
+	for (j = 0; j < image.height; j++)
+	{
+		int	len;
+
+		// record start-of-row file position for index table
+		index[j] = ftell(out);
+
+		this->read8BPPTiffLine(tif, bits_per_sample, image.width, tiff_row, j);
+
+		// compress raster and write to BSB file 
+		len = bsb_compress_row(&image, j, tiff_row, scratch);
+		fwrite(scratch, len, 1, out);
+	}
+
+	free(scratch);
+	free(tiff_row);
+	TIFFClose(tif);
+
+	// record start-of-index-table file position in the index table
+	index[image.height] = ftell(out);
+
+	bsb_write_index(out, image.height, index);
+	free(index);
+
+	fclose(out);
 
 	return true;
 };

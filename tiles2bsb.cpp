@@ -61,7 +61,7 @@ int main()
 	std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
 
 	BSB b;
-	bool result = b.fromTiff("tiles/map.tif");
+	bool result = b.fromTiff("tiles/map.tif", "template.kap", "map.kap");
 
   	return 0;
 }

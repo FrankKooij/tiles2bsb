@@ -65,6 +65,14 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
 	std::vector<Magick::Image> montagelist;
     Magick::montageImages( &montagelist, sourceImageList.begin(), sourceImageList.end(), montageSettings);
 
+    // reduce amount of colors for every image
+    for(Magick::Image &image : montagelist) 
+    {
+        image.type(Magick::PaletteType);
+        image.quantizeColors(128); 
+        image.quantize();
+    }
+
     // This will give the expected result
    	Magick::writeImages(montagelist.begin(), montagelist.end(), fileName);
 
