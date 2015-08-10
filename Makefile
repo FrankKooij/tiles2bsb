@@ -15,6 +15,7 @@ clean:
 	rm test/test
 	rm tiles/*.png
 	rm tiles/*.tif
+	rm *.kap
 
 test:
 	$(CC) $(CFLAGS) -o test/test test/test.cpp $(LDFLAGS)

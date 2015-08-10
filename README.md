@@ -23,3 +23,15 @@ Scrapes a tileserver and outputs the result in BSB format which is typically use
 
 * http://a.tile.osm.org/{z}/{x}/{y}.png
 * http://d2hcl9zx8watk4.cloudfront.net/tile/16/32985/22231?LAYERS=config_1_1_0&TRANSPARENT=FALSE&navtoken=TmF2aW9uaWNzX2ludGVybmFscHVycG9zZV8wMDAwMSt3ZWJhcHAubmF2aW9uaWNzLmNvbQ%3D%3D
+
+## Ideas
+
+### Selecting the areas to extract from a map using GeoJSON
+
+http://cstheory.stackexchange.com/questions/5540/packing-rectangles-into-convex-polygons-but-without-rotations
+
+Finding the most and best rectangles to fit the polygon. Requirements for the rectangles are
+
+* non-rotated
+* not too small
+* non-overlapping
