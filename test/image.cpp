@@ -26,5 +26,7 @@ TEST_CASE("Stich images together to one giant image", "[stitchTogether]")
 
     // stitch images together
     Image i;
-    i.stitchTogether(tiles, zoom, "tiles/map.tif");
+    bool result = i.stitchTogether(tiles, zoom, "tiles/map.tif");
+
+    REQUIRE( result == true ); 
 }
