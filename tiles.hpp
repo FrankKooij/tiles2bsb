@@ -19,6 +19,7 @@
 
 #include "coordinate.hpp"
 #include "boundingbox.hpp"
+#include "polygon.hpp"
 #include "xy.hpp"
 
 // TILES RESULT
@@ -83,10 +84,18 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 // FROM POLYGON
 inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordinate> polygonPoints)
 {
-	// find center of polygon
-
-
 	std::vector<TilesResult> results;
+
+	// cover the polygon with rectangles
+	Polygon p(polygonPoints);
+	std::vector<BoundingBox> boxes = p.getCoveringRectangles();
+
+	// get tile frames from boxes
+	for(BoundingBox box : boxes)
+	{
+		results.push_back(this->fromBoundingBox(zoom, box));
+	}
+
 	return results;
 };
 
