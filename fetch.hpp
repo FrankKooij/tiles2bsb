@@ -24,10 +24,10 @@
 
 size_t writeData(void *ptr, size_t size, size_t nmemb, void *stream) 
 {
-    std::string data((const char*) ptr, (size_t) size * nmemb);
-    *((std::stringstream*) stream) << data;
+	std::string data((const char*) ptr, (size_t) size * nmemb);
+	*((std::stringstream*) stream) << data;
 
-    return size * nmemb;
+	return size * nmemb;
 }
 
 class Fetch
@@ -47,13 +47,13 @@ public:
 // CONSTRUCTOR
 Fetch::Fetch() 
 {
-    curl = curl_easy_init();
+	curl = curl_easy_init();
 };
 
 // DESTRUCTOR
 Fetch::~Fetch() 
 {
-    curl_easy_cleanup(curl);
+	curl_easy_cleanup(curl);
 };
 
 // REPLACE
@@ -81,27 +81,27 @@ inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
 
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
-    // example.com is redirected, so we tell libcurl to follow redirection
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1); // prevent "longjmp causes uninitialized stack frame" bug
-    curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "deflate");
+	// example.com is redirected, so we tell libcurl to follow redirection
+	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1); // prevent "longjmp causes uninitialized stack frame" bug
+	curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "deflate");
 
-    std::stringstream out;
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeData);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
+	std::stringstream out;
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeData);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
 
-    // perform the request, res will get the return code
-    CURLcode res = curl_easy_perform(curl);
+	// perform the request, res will get the return code
+	CURLcode res = curl_easy_perform(curl);
 
-    // check for errors
-    if (res != CURLE_OK) 
-    {
-        fprintf(stderr, "curl_easy_perform() failed: %s\n",
-            curl_easy_strerror(res));
-    }
+	// check for errors
+	if (res != CURLE_OK) 
+	{
+		fprintf(stderr, "curl_easy_perform() failed: %s\n",
+			curl_easy_strerror(res));
+	}
 
-    // return the resulting content
-    std::string result(out.str());
+	// return the resulting content
+	std::string result(out.str());
 	return result;
 };
 
@@ -120,15 +120,15 @@ inline bool Fetch::saveFromUrl(std::string url, int zoom, int x, int y, std::str
 	// write to file
 	std::ofstream os(fileName.c_str());
 
-    if(!os)
-    {
-        return false;
-    }
+	if(!os)
+	{
+		return false;
+	}
 
-    os << content;
-    os.close();
+	os << content;
+	os.close();
 
-    return true;
+	return true;
 };
 
 #endif

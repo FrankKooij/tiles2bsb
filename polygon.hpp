@@ -45,49 +45,49 @@ inline Coordinate Polygon::getCentroid()
 {
 	Coordinate centroid(0.0, 0.0);
 
-    double signedArea = 0.0;
+	double signedArea = 0.0;
 
-    double x0 = 0.0; // Current vertex X
-    double y0 = 0.0; // Current vertex Y
-    double x1 = 0.0; // Next vertex X
-    double y1 = 0.0; // Next vertex Y
-    double a = 0.0;  // Partial signed area
+	double x0 = 0.0; // Current vertex X
+	double y0 = 0.0; // Current vertex Y
+	double x1 = 0.0; // Next vertex X
+	double y1 = 0.0; // Next vertex Y
+	double a = 0.0;  // Partial signed area
 
-    // For all vertices except last
-    int i = 0;
-    for (; i < this->coordinates.size() - 1; i++)
-    {
-        x0 = this->coordinates[i].longitude;
-        y0 = this->coordinates[i].latitude;
+	// For all vertices except last
+	int i = 0;
+	for (; i < this->coordinates.size() - 1; i++)
+	{
+		x0 = this->coordinates[i].longitude;
+		y0 = this->coordinates[i].latitude;
 
-        x1 = this->coordinates[i + 1].longitude;
-        y1 = this->coordinates[i + 1].latitude;
+		x1 = this->coordinates[i + 1].longitude;
+		y1 = this->coordinates[i + 1].latitude;
 
-        a = x0 * y1 - x1 * y0;
-        signedArea += a;
+		a = x0 * y1 - x1 * y0;
+		signedArea += a;
 
-        centroid.longitude += (x0 + x1) * a;
-        centroid.latitude += (y0 + y1) * a;
-    }
+		centroid.longitude += (x0 + x1) * a;
+		centroid.latitude += (y0 + y1) * a;
+	}
 
-    // do last vertex
-    x0 = this->coordinates[i].longitude;
-    y0 = this->coordinates[i].latitude;
+	// do last vertex
+	x0 = this->coordinates[i].longitude;
+	y0 = this->coordinates[i].latitude;
 
-    x1 = this->coordinates[0].longitude;
-    y1 = this->coordinates[0].latitude;
+	x1 = this->coordinates[0].longitude;
+	y1 = this->coordinates[0].latitude;
 
-    a = x0 * y1 - x1 * y0;
-    signedArea += a;
+	a = x0 * y1 - x1 * y0;
+	signedArea += a;
 
-    centroid.longitude += (x0 + x1) * a;
-    centroid.latitude += (y0 + y1) * a;
+	centroid.longitude += (x0 + x1) * a;
+	centroid.latitude += (y0 + y1) * a;
 
-    signedArea *= 0.5;
-    centroid.longitude /= (6.0 * signedArea);
-    centroid.latitude /= (6.0 * signedArea);
+	signedArea *= 0.5;
+	centroid.longitude /= (6.0 * signedArea);
+	centroid.latitude /= (6.0 * signedArea);
 
-    return centroid;
+	return centroid;
 };
 
 // GET COVERING RECTANGLES

@@ -57,6 +57,8 @@ int main()
 		// loop all tile mapping results
 		for(auto tiles : tileResults)
 		{
+			std::cout << "------------------------" << std::endl;
+
 			// loop all xy coordinates to download
 			for(XY xy : tiles.coordinates) 
 			{
@@ -73,13 +75,13 @@ int main()
 			e.Start();
 
 			// stitch images together
-		    Image i;
-		    bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + patches::to_string(j) + ".png");
-		    if(stitchResult == true) {
+			Image i;
+			bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + patches::to_string(j) + ".png");
+			if(stitchResult == true) {
 				std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
 			}
 
-		    // display stats
+			// display stats
 			double stitchingMs = e.End();
 			std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
 
@@ -102,5 +104,5 @@ int main()
 	std::cout << GREY << "Total runtime of tiles2bsb " << totalMs << "ms" << DEFAULT << std::endl;
 	
 
-  	return 0;
+	return 0;
 }

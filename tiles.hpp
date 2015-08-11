@@ -136,7 +136,7 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	// coordinate, but we must find the real lat/lon bounds of the tile in order
 	// to correctly compute a calibrated .cap file later
 	double exploreLeftLon = topLeft.longitude;
-	const double pumpingValue = 0.00000001;
+	const double pumpingValue = 0.000001;
 	XY exploreLeftX;
 	do {
 		exploreLeftLon -= pumpingValue;
