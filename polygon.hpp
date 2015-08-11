@@ -25,12 +25,19 @@ public:
 	Polygon(std::vector<Coordinate> coordinates);
 	inline Coordinate getCentroid();
 	inline std::vector<BoundingBox> getCoveringRectangles();
+	inline std::vector<Coordinate> getCoordinates();
 };
 
 // CONSTRUCTOR
 Polygon::Polygon(std::vector<Coordinate> coordinates) 
 {
 	this->coordinates = coordinates;
+};
+
+// GET COORDINATES
+inline std::vector<Coordinate> Polygon::getCoordinates()
+{
+	return this->coordinates;
 };
 
 // GET CENTROID

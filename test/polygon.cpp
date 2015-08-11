@@ -3,7 +3,7 @@
 #include "../coordinate.hpp"
 #include <vector>
 
-TEST_CASE("Construct a polygon and find the centriod", "[getControid]")
+/*TEST_CASE("Find cnetroid of polygon", "[getCnetroid]")
 {
 	std::vector<Coordinate> points;
 
@@ -23,7 +23,7 @@ TEST_CASE("Construct a polygon and find the centriod", "[getControid]")
 
 	REQUIRE( center.latitude == 1.5 );
 	REQUIRE( center.longitude == 1.5);
-}
+}*/
 
 TEST_CASE("Find covering rectangles of polygon", "[getCoveringRectangles]")
 {

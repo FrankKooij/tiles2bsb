@@ -44,6 +44,7 @@ private:
 public:
 	inline XY fromCoordinate(int zoom, Coordinate coord);
 	inline XY fromCoordinate(int zoom, double lon, double lat);
+	inline std::vector<TilesResult> fromPolygon(int zoom, Polygon polygon);
 	inline std::vector<TilesResult> fromPolygon(int zoom, std::vector<Coordinate> polygonPoints);
 	inline TilesResult fromBoundingBox(int zoom, BoundingBox box);
 	inline TilesResult fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight);
@@ -82,6 +83,11 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 };
 
 // FROM POLYGON
+inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, Polygon polygon)
+{
+	return this->fromPolygon(zoom, polygon.getCoordinates());
+};
+
 inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordinate> polygonPoints)
 {
 	std::vector<TilesResult> results;

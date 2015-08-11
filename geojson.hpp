@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 #include "polygon.hpp"
 #include "coordinate.hpp"
 #include "json.hpp"
@@ -26,15 +27,25 @@ private:
 	inline std::vector<Polygon> parseInternal(json j);
 
 public:
-	inline std::vector<Polygon> parse(std::string jsonString);
+	inline std::vector<Polygon> parseString(std::string jsonString);
+	inline std::vector<Polygon> parseFile(std::string path);
 };
 
-// PARSE
-inline std::vector<Polygon> Geojson::parse(std::string jsonString)
+// PARSE STRING
+inline std::vector<Polygon> Geojson::parseString(std::string jsonString)
 {
 	auto j = json::parse(jsonString);
 	return this->parseInternal(j);
 };
+
+// PARSE FILE
+inline std::vector<Polygon> Geojson::parseFile(std::string path)
+{
+	std::ifstream ifs(path);
+	std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+
+	return this->parseString(content);
+}
 
 // PARSE INTERNAL
 inline std::vector<Polygon> Geojson::parseInternal(json j)
