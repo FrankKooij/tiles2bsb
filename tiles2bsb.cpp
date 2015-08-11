@@ -41,13 +41,15 @@ int main()
 	Tiles tiles;
 	Geojson gjson;
 	Fetch f;
-	
+
 	std::vector<Polygon> polygons = gjson.parseFile("test/test.geojson");
 
 	// loop all the available polygons
+	int j = 1;
 	for (auto polyg : polygons)
 	{
 		Elapsed e; e.Start();
+		std::cout << "========================" << std::endl;
 		std::cout << "Start processing of Polygon!" << std::endl;
 
 		std::vector<TilesResult> tileResults = tiles.fromPolygon(zoom, polyg);
@@ -72,7 +74,7 @@ int main()
 
 			// stitch images together
 		    Image i;
-		    bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map.png");
+		    bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + patches::to_string(j) + ".png");
 		    if(stitchResult == true) {
 				std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
 			}
@@ -84,13 +86,15 @@ int main()
 			e.Start();
 
 			BSB b;
-			bool bsbResult = b.fromPNG("tiles/map.png", "map.kap", tiles.topLeftEdge, tiles.bottomRightEdge);
+			bool bsbResult = b.fromPNG("tiles/map.png", "map_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
 			if(bsbResult == true) {
 				std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
 			}
 
 			double bsbMs = e.End();
-		std::cout << GREY << "Converting to .kap file took " << bsbMs << "ms" << DEFAULT << std::endl;
+			std::cout << GREY << "Converting to .kap file took " << bsbMs << "ms" << DEFAULT << std::endl;
+
+			j++;
 		}
 	}
 

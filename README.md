@@ -7,7 +7,7 @@ Scrapes a tileserver and outputs the result in BSB format which is typically use
 
 * libCurl
 * ImageMagick / Magick++
-* libpng
+* libPNG
 * FreeImage
 
 ## Resources
