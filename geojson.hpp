@@ -15,9 +15,14 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <exception>
 #include "polygon.hpp"
 #include "coordinate.hpp"
 #include "json.hpp"
+#include "crayons.hpp"
+
+Crayon GEOJSON_DEFAULT(FG_DEFAULT);
+Crayon GEOJSON_RED(FG_RED);
 
 using json = nlohmann::json;
 
@@ -34,7 +39,18 @@ public:
 // PARSE STRING
 inline std::vector<Polygon> Geojson::parseString(std::string jsonString)
 {
-	auto j = json::parse(jsonString);
+	json j;
+	try
+	{
+		std::cout << jsonString << std::endl;
+		j = json::parse(jsonString);
+	}
+	catch(std::exception& e)
+	{
+		std::cout << GEOJSON_RED << e.what() << GEOJSON_DEFAULT << std::endl;
+    	throw e;
+	}
+	
 	return this->parseInternal(j);
 };
 
@@ -50,42 +66,51 @@ inline std::vector<Polygon> Geojson::parseFile(std::string path)
 // PARSE INTERNAL
 inline std::vector<Polygon> Geojson::parseInternal(json j)
 {
+
 	std::vector<Polygon> results;
 
-	// feature collection
-	if (j["type"] == "FeatureCollection") 
+	try
 	{
-		
-		// loop all features
-		for(auto f : j["features"])
+		// feature collection
+		if (j["type"] == "FeatureCollection") 
 		{
-			// parse a recursive branch of this feature
-			std::vector<Polygon> tmp = this->parseInternal(f);
-
-			// add results of features recursive branch to results
-			results.insert(results.end(), tmp.begin(), tmp.end());
-		}
-	}
-
-	// feature
-	else if(j["type"] == "Feature") 
-	{	
-		// we are only interested in polygons
-		if(j["geometry"]["type"] == "Polygon")
-		{
-			// loop coordinates and create polygon elements from it
-			std::vector<Coordinate> coordinates;
-
-			for(auto coord : j["geometry"]["coordinates"][0])
+			
+			// loop all features
+			for(auto f : j["features"])
 			{
-				Coordinate c(coord[0], coord[1]);
-				coordinates.push_back(c);
-			}
+				// parse a recursive branch of this feature
+				std::vector<Polygon> tmp = this->parseInternal(f);
 
-			Polygon p(coordinates);
-			results.push_back(p);
+				// add results of features recursive branch to results
+				results.insert(results.end(), tmp.begin(), tmp.end());
+			}
+		}
+
+		// feature
+		else if(j["type"] == "Feature") 
+		{	
+			// we are only interested in polygons
+			if(j["geometry"]["type"] == "Polygon")
+			{
+				// loop coordinates and create polygon elements from it
+				std::vector<Coordinate> coordinates;
+
+				for(auto coord : j["geometry"]["coordinates"][0])
+				{
+					Coordinate c(coord[0], coord[1]);
+					coordinates.push_back(c);
+				}
+
+				Polygon p(coordinates);
+				results.push_back(p);
+			}
 		}
 	}
+	catch (std::exception& e)
+  	{
+    	std::cout << GEOJSON_RED << e.what() << GEOJSON_DEFAULT << std::endl;
+    	throw e;
+    }
 
 	return results;
 };

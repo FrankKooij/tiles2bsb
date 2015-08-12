@@ -24,7 +24,7 @@ Scrapes a tileserver and outputs the result in BSB format which is typically use
 ## Tile Server
 
 * http://a.tile.osm.org/{z}/{x}/{y}.png
-* http://d2hcl9zx8watk4.cloudfront.net/tile/16/32985/22231?LAYERS=config_1_1_0&TRANSPARENT=FALSE&navtoken=TmF2aW9uaWNzX2ludGVybmFscHVycG9zZV8wMDAwMSt3ZWJhcHAubmF2aW9uaWNzLmNvbQ%3D%3D
+* http://d2hcl9zx8watk4.cloudfront.net/tile/{z}/{x}/{y}?LAYERS=config_1_1_0&TRANSPARENT=FALSE&navtoken=TmF2aW9uaWNzX2ludGVybmFscHVycG9zZV8wMDAwMSt3ZWJhcHAubmF2aW9uaWNzLmNvbQ%3D%3D
 
 ## Ideas
 

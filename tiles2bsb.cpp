@@ -11,6 +11,7 @@
 // ---------------------------------------------------------------------------
 
 #include <iostream>
+#include <string>
 #include <utility>
 
 #include "tiles.hpp"
@@ -23,26 +24,39 @@
 #include "coordinate.hpp"
 #include "elapsed.hpp"
 #include "crayons.hpp"
+#include "config.hpp"
 
 Crayon GREY(FG_LIGHT_GRAY);
 Crayon DEFAULT(FG_DEFAULT);
 Crayon GREEN(FG_GREEN);
+Crayon RED(FG_RED);
 
-int main()
+int main(int argc, char* argv[])
 {
 	std::cout << "=== TILES-2-BSB v1.0 ===" << std::endl;
+
+	if (argc < 2) 
+	{ 
+		std::cout << RED << "Error: Missing Parameters!" << DEFAULT << std::endl;
+		std::cout << "Usage: ./tiles2bsb path/to/config.json" << std::endl;
+		exit(1);
+	}
+
+	// load config from json file
+	std::string confFile(argv[1]);
+	Config conf(confFile);
 
 	Elapsed total; 
 	total.Start();
 
-	int zoom = 14;
+	int zoom = conf.zoom;
 
 	// read geojson from input string
 	Tiles tiles;
 	Geojson gjson;
 	Fetch f;
 
-	std::vector<Polygon> polygons = gjson.parseFile("test/test.geojson");
+	std::vector<Polygon> polygons = gjson.parseFile(conf.geojsonPath);
 
 	// loop all the available polygons
 	int j = 1;
@@ -63,7 +77,7 @@ int main()
 			for(XY xy : tiles.coordinates) 
 			{
 				// download each of these tiles
-				f.saveFromUrl("http://a.tile.osm.org/{z}/{x}/{y}.png", zoom, xy.x, xy.y, "tiles/{z}_{x}_{y}.png");
+				f.saveFromUrl(conf.tileServerUrl, zoom, xy.x, xy.y, "tiles/{z}_{x}_{y}.png");
 			}
 
 			std::cout << GREEN << "Tile download ... OK" << DEFAULT << std::endl;
@@ -76,7 +90,7 @@ int main()
 
 			// stitch images together
 			Image i;
-			bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + patches::to_string(j) + ".png");
+			bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png");
 			if(stitchResult == true) {
 				std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
 			}
@@ -88,7 +102,7 @@ int main()
 			e.Start();
 
 			BSB b;
-			bool bsbResult = b.fromPNG("tiles/map.png", "map_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
+			bool bsbResult = b.fromPNG("tiles/map.png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
 			if(bsbResult == true) {
 				std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
 			}

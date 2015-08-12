@@ -1,0 +1,6 @@
+{
+	"name": "EnglischerKanel",
+	"geojsonPath": "configs/englischer_kanal.geojson",
+	"tileServerUrl": "http://d2hcl9zx8watk4.cloudfront.net/tile/{z}/{x}/{y}?LAYERS=config_1_1_0&TRANSPARENT=FALSE&navtoken=TmF2aW9uaWNzX2ludGVybmFscHVycG9zZV8wMDAwMSt3ZWJhcHAubmF2aW9uaWNzLmNvbQ%3D%3D",
+	"zoom": 12
+}

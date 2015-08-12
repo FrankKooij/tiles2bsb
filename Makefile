@@ -1,5 +1,5 @@
 CC	= g++
-CFLAGS	= -Wall -Ofast -g -std=c++11 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/opt/ImageMagick/include/ImageMagick-6 -I/usr/local/include
+CFLAGS	= -Wall -Ofast -std=c++11 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16 -I/opt/ImageMagick/include/ImageMagick-6 -I/usr/local/include
 LDFLAGS	= -lcurl -L/opt/ImageMagick/lib -lMagick++-6.Q16 -lMagickCore-6.Q16 -L/usr/local/lib -ltiff
 EXE = tiles2bsb
 OBJ = 
@@ -12,10 +12,10 @@ all: $(EXE)
 clean:
 	rm -f *~ *.o core $(EXE)
 	rm -rf *.dSYM
-	rm test/test
 	rm tiles/*.png
 	rm tiles/*.tif
 	rm *.kap
+	rm test/test
 
 test:
 	$(CC) $(CFLAGS) -o test/test test/test.cpp $(LDFLAGS)
