@@ -19,6 +19,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
 
 #include "patches.hpp"
 
@@ -79,12 +81,15 @@ inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
 	this->replace(url, "{x}", patches::to_string(x));
 	this->replace(url, "{y}", patches::to_string(y));
 
+	std::cout << "Download " << url << " ... ";
+
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
 	// example.com is redirected, so we tell libcurl to follow redirection
 	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 	curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1); // prevent "longjmp causes uninitialized stack frame" bug
 	curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "deflate");
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
 
 	std::stringstream out;
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeData);
@@ -109,13 +114,17 @@ inline std::string Fetch::fromUrl(std::string url, int zoom, int x, int y)
 // fetches the content from url and saves it to a file on disk
 inline bool Fetch::saveFromUrl(std::string url, int zoom, int x, int y, std::string fileName)
 {
-	// fetch the content form url
-	std::string content = this->fromUrl(url, zoom, x, y);
-
 	// replace the zoom, x and y parameters to the filename
 	this->replace(fileName, "{z}", patches::to_string(zoom));
 	this->replace(fileName, "{x}", patches::to_string(x));
 	this->replace(fileName, "{y}", patches::to_string(y));
+
+	// check if file exists
+	std::ifstream checkfile(fileName);
+    if(checkfile.good()) return true;
+
+	// fetch the content form url
+	std::string content = this->fromUrl(url, zoom, x, y);
 
 	// write to file
 	std::ofstream os(fileName.c_str());
@@ -127,6 +136,9 @@ inline bool Fetch::saveFromUrl(std::string url, int zoom, int x, int y, std::str
 
 	os << content;
 	os.close();
+
+	std::cout << "done" << std::endl;
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 	return true;
 };
