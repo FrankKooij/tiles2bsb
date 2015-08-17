@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 			e.Start();
 
 			BSB b;
-			bool bsbResult = b.fromPNG("tiles/map.png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
+			bool bsbResult = b.fromPNG("tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
 			if(bsbResult == true) {
 				std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
 			}
