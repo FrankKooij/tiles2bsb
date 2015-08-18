@@ -12,9 +12,9 @@ all: $(EXE)
 clean:
 	rm -f *~ *.o core $(EXE)
 	rm -rf *.dSYM
-	rm tiles/*.png
-	rm tiles/*.tif
-	rm *.kap
+	#rm tiles/*.png
+	#rm tiles/*.tif
+	#rm *.kap
 	rm test/test
 
 test:

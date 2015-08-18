@@ -18,6 +18,10 @@
 
 #include "patches.hpp"
 #include "tiles.hpp"
+#include "crayons.hpp"
+
+Crayon IMAGE_RED(FG_RED);
+Crayon IMAGE_DEFAULT(FG_DEFAULT);
 
 class Image
 {
@@ -40,14 +44,36 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
 	std::vector<Magick::Image> sourceImageList;
     Magick::Image image;
 
+    int errorCount = 0;
+
     // loop all coordinates
     for(XY xy : tiles.coordinates)
     {
     	std::string imageName = "tiles/" + patches::to_string(zoom) + "_" + patches::to_string(xy.x) + 
     							"_" + patches::to_string(xy.y) + ".png";
 
-    	image.read(imageName);
-    	sourceImageList.push_back(image);
+        // read content of image
+        std::ifstream ifs(imageName);
+        std::string content((std::istreambuf_iterator<char>(ifs)),
+                            (std::istreambuf_iterator<char>()));
+
+        // check if some html crap is in this image file
+        if(content.find("<html") != std::string::npos)
+        {
+            std::cout << IMAGE_RED << "ERROR: html content in file " << imageName << IMAGE_DEFAULT << std::endl;
+            errorCount++;
+        }
+        else 
+        {
+            image.read(imageName);
+            sourceImageList.push_back(image);
+        }
+    }
+
+    // quit if more than one error occured
+    if(errorCount > 0) 
+    {
+        exit(2);
     }
 
     Magick::Geometry tileGeometry(tiles.width, tiles.height); 
