@@ -91,8 +91,13 @@ int main(int argc, char* argv[])
 			// stitch images together
 			Image i;
 			bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png");
-			if(stitchResult == true) {
+			if(stitchResult == true) 
+			{
 				std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
+			}
+			else 
+			{
+				std::cout << RED << "Image stitching ... ERROR" << DEFAULT << std::endl;
 			}
 
 			// display stats
@@ -103,8 +108,13 @@ int main(int argc, char* argv[])
 
 			BSB b;
 			bool bsbResult = b.fromPNG("tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
-			if(bsbResult == true) {
+			if(bsbResult == true) 
+			{
 				std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
+			}
+			else 
+			{
+				std::cout << RED << "BSB conversion ... ERROR" << DEFAULT << std::endl;
 			}
 
 			double bsbMs = e.End();

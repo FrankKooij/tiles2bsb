@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <Magick++.h>
+#include <exception>
 
 #include "patches.hpp"
 #include "tiles.hpp"
@@ -43,6 +44,10 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
 {	
     try
     {
+        // check if stitched image already exists
+        std::ifstream checkfile(fileName);
+        if(checkfile.good()) return true;
+
         std::vector<Magick::Image> sourceImageList;
         Magick::Image image;
 
@@ -106,7 +111,7 @@ inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileN
 
         return true;
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         std::cout << e.what() << std::endl;
         return false;
