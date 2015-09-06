@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 		std::cout << "========================" << std::endl;
 		std::cout << "Start processing of Polygon!" << std::endl;
 
-		std::vector<TilesResult> tileResults = tiles.fromPolygon(zoom, polyg);
+		std::vector<TilesResult> tileResults = tiles.fromPolygon(zoom, polyg, 4);
 
 		// loop all tile mapping results
 		for(auto tiles : tileResults)

@@ -23,7 +23,7 @@ public:
 	Coordinate();
 	Coordinate(double lon, double lat);
 	inline std::string toString();
-	inline bool isLeft(Coordinate startLine, Coordinate endLine);
+	inline int isLeft(Coordinate startLine, Coordinate endLine);
 };
 
 Coordinate::Coordinate()
@@ -48,7 +48,7 @@ inline std::string Coordinate::toString()
 // Return: >0 for point left of the line through start and end
 //         =0 for point on the line
 //         <0 for point right of the line
-inline bool isLeft(Coordinate startLine, Coordinate endLine)
+inline int Coordinate::isLeft(Coordinate startLine, Coordinate endLine)
 {
 	return ((endLine.longitude - startLine.longitude) * (this->latitude - startLine.latitude)
             - (this->longitude -  startLine.longitude) * (endLine.latitude - startLine.latitude));

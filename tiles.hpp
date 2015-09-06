@@ -44,7 +44,7 @@ private:
 public:
 	inline XY fromCoordinate(int zoom, Coordinate coord);
 	inline XY fromCoordinate(int zoom, double lon, double lat);
-	inline std::vector<TilesResult> fromPolygon(int zoom, Polygon polygon);
+	inline std::vector<TilesResult> fromPolygon(int zoom, Polygon polygon, int detailLevel = 1);
 	inline std::vector<TilesResult> fromPolygon(int zoom, std::vector<Coordinate> polygonPoints, int detailLevel = 1);
 	inline TilesResult fromBoundingBox(int zoom, BoundingBox box);
 	inline TilesResult fromBoundingBox(int zoom, Coordinate topLeft, Coordinate bottomRight);
@@ -83,9 +83,9 @@ inline XY Tiles::fromCoordinate(int zoom, double lon, double lat)
 };
 
 // FROM POLYGON
-inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, Polygon polygon)
+inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, Polygon polygon, int detailLevel)
 {
-	return this->fromPolygon(zoom, polygon.getCoordinates());
+	return this->fromPolygon(zoom, polygon.getCoordinates(), detailLevel);
 };
 
 inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordinate> polygonPoints, int detailLevel)
@@ -99,12 +99,12 @@ inline std::vector<TilesResult> Tiles::fromPolygon(int zoom, std::vector<Coordin
 	// grind down to specified detail level
 	for(int lev = 1; lev <= detailLevel; lev++)
 	{
-		Polygon tmp(boxes);
 		std::vector<BoundingBox> tmpboxes;
 
 		for(BoundingBox box : boxes) 
 		{
-			std::vector<BoundingBox> tmptmp = tmp.getCoveringRectangles(p);
+			Polygon tmp(box);
+			std::vector<BoundingBox> tmptmp = tmp.getCoveringRectangles(p, true);
 			tmpboxes.insert(tmpboxes.end(), tmptmp.begin(), tmptmp.end());
 		}
 

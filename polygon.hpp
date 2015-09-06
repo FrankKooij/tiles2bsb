@@ -25,8 +25,9 @@ public:
 	Polygon(std::vector<Coordinate> coordinates);
 	Polygon(BoundingBox box);
 	inline Coordinate getCentroid();
-	inline std::vector<BoundingBox> getCoveringRectangles(Polygon original);
+	inline std::vector<BoundingBox> getCoveringRectangles(Polygon original, bool forceContaining = false);
 	inline std::vector<Coordinate> getCoordinates();
+	inline bool contains(Coordinate coord);
 	inline bool contains(BoundingBox box);
 };
 
@@ -47,6 +48,7 @@ inline std::vector<Coordinate> Polygon::getCoordinates()
 	return this->coordinates;
 };
 
+// CONTAINS
 inline bool Polygon::contains(Coordinate coord)
 {
 	int wn = 0; // the  winding number counter
@@ -82,7 +84,15 @@ inline bool Polygon::contains(Coordinate coord)
 // CONTAINS
 inline bool Polygon::contains(BoundingBox box) 
 {
+	for(Coordinate coord : box.getCoordinates())
+	{
+		if(this->contains(coord) == false) 
+		{
+			return false;
+		}
+	}
 
+	return true;
 };
 
 // GET CENTROID
@@ -136,7 +146,7 @@ inline Coordinate Polygon::getCentroid()
 };
 
 // GET COVERING RECTANGLES
-inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
+inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original, bool forceContaining)
 {
 	std::vector<BoundingBox> results;
 
@@ -174,7 +184,15 @@ inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
 		Coordinate trcBottomRight(maxLongitude, center.latitude);
 
 		BoundingBox trcBox(trcTopLeft, trcBottomRight);
-		results.push_back(trcBox);
+
+		if(forceContaining == true) 
+		{
+			if(original.contains(trcBox)) results.push_back(trcBox);
+		}
+		else 
+		{
+			results.push_back(trcBox);
+		}
 	}
 
 	// BOTTOM RIGHT CORNER
@@ -208,7 +226,15 @@ inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
 		Coordinate brcBottomRight(maxLongitude, maxLatitude);
 
 		BoundingBox brcBox(brcTopLeft, brcBottomRight);
-		results.push_back(brcBox);
+
+		if(forceContaining == true)
+		{
+			if(original.contains(brcBox)) results.push_back(brcBox);
+		}		
+		else 
+		{
+			results.push_back(brcBox);
+		}
 	}
 
 	// BOTTOM LEFT CORNER
@@ -242,7 +268,15 @@ inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
 		Coordinate blcBottomRight(center.longitude, maxLatitude);
 
 		BoundingBox blcBox(blcTopLeft, blcBottomRight);
-		results.push_back(blcBox);
+
+		if(forceContaining == true) 
+		{
+			if(original.contains(blcBox)) results.push_back(blcBox);
+		}
+		else 
+		{
+			results.push_back(blcBox);
+		}
 	}
 
 	// TOP LEFT CORNER
@@ -276,7 +310,15 @@ inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
 		Coordinate tlcBottomRight(center.longitude, center.latitude);
 
 		BoundingBox tlcBox(tlcTopLeft, tlcBottomRight);
-		results.push_back(tlcBox);
+
+		if(forceContaining == true)
+		{
+			if(original.contains(tlcBox)) results.push_back(tlcBox);
+		}
+		else 
+		{
+			results.push_back(tlcBox);
+		}
 	}
 
 	return results;
