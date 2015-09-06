@@ -41,68 +41,76 @@ Image::Image()
 // STITCH TOGETHER
 inline bool Image::stitchTogether(TilesResult tiles, int zoom, std::string fileName)
 {	
-	std::vector<Magick::Image> sourceImageList;
-    Magick::Image image;
-
-    int errorCount = 0;
-
-    // loop all coordinates
-    for(XY xy : tiles.coordinates)
+    try
     {
-    	std::string imageName = "tiles/" + patches::to_string(zoom) + "_" + patches::to_string(xy.x) + 
-    							"_" + patches::to_string(xy.y) + ".png";
+        std::vector<Magick::Image> sourceImageList;
+        Magick::Image image;
 
-        // read content of image
-        std::ifstream ifs(imageName);
-        std::string content((std::istreambuf_iterator<char>(ifs)),
-                            (std::istreambuf_iterator<char>()));
+        int errorCount = 0;
 
-        // check if some html crap is in this image file
-        if(content.find("<html") != std::string::npos)
+        // loop all coordinates
+        for(XY xy : tiles.coordinates)
         {
-            std::cout << IMAGE_RED << "ERROR: html content in file " << imageName << IMAGE_DEFAULT << std::endl;
-            errorCount++;
+            std::string imageName = "tiles/" + patches::to_string(zoom) + "_" + patches::to_string(xy.x) + 
+                                    "_" + patches::to_string(xy.y) + ".png";
+
+            // read content of image
+            std::ifstream ifs(imageName);
+            std::string content((std::istreambuf_iterator<char>(ifs)),
+                                (std::istreambuf_iterator<char>()));
+
+            // check if some html crap is in this image file
+            if(content.find("<html") != std::string::npos)
+            {
+                std::cout << IMAGE_RED << "ERROR: html content in file " << imageName << IMAGE_DEFAULT << std::endl;
+                errorCount++;
+            }
+            else 
+            {
+                image.read(imageName);
+                sourceImageList.push_back(image);
+            }
         }
-        else 
+
+        // quit if more than one error occured
+        if(errorCount > 0) 
         {
-            image.read(imageName);
-            sourceImageList.push_back(image);
+            exit(2);
         }
-    }
 
-    // quit if more than one error occured
-    if(errorCount > 0) 
+        Magick::Geometry tileGeometry(tiles.width, tiles.height); 
+
+        // background color for the montage
+        Magick::Color color("rgba(0,0,0,0)");
+
+        // prepare settings for the montage
+        Magick::Montage montageSettings;
+        montageSettings.geometry("256x256-0-0");
+        montageSettings.shadow(false);
+        montageSettings.backgroundColor(color);
+        montageSettings.tile(tileGeometry);
+
+        std::vector<Magick::Image> montagelist;
+        Magick::montageImages( &montagelist, sourceImageList.begin(), sourceImageList.end(), montageSettings);
+
+        // reduce amount of colors for every image
+        for(Magick::Image &image : montagelist) 
+        {
+            image.type(Magick::PaletteType);
+            image.quantizeColors(128); 
+            image.quantize();
+        }
+
+        // This will give the expected result
+        Magick::writeImages(montagelist.begin(), montagelist.end(), fileName);
+
+        return true;
+    }
+    catch (exception& e)
     {
-        exit(2);
+        std::cout << e.what() << std::endl;
+        return false;
     }
-
-    Magick::Geometry tileGeometry(tiles.width, tiles.height); 
-
-    // background color for the montage
-	Magick::Color color("rgba(0,0,0,0)");
-
-	// prepare settings for the montage
-	Magick::Montage montageSettings;
-	montageSettings.geometry("256x256-0-0");
-	montageSettings.shadow(false);
-	montageSettings.backgroundColor(color);
-	montageSettings.tile(tileGeometry);
-
-	std::vector<Magick::Image> montagelist;
-    Magick::montageImages( &montagelist, sourceImageList.begin(), sourceImageList.end(), montageSettings);
-
-    // reduce amount of colors for every image
-    for(Magick::Image &image : montagelist) 
-    {
-        image.type(Magick::PaletteType);
-        image.quantizeColors(128); 
-        image.quantize();
-    }
-
-    // This will give the expected result
-   	Magick::writeImages(montagelist.begin(), montagelist.end(), fileName);
-
-	return true;
 }
 
 #endif
