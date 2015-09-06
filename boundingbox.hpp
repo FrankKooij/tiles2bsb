@@ -27,6 +27,7 @@ public:
 	Coordinate topLeft;
 	Coordinate bottomRight;
 	std::string toString();
+	std::vector<Coordinate> getCoordinates();
 };
 
 // CONSTRUCTOR
@@ -47,6 +48,28 @@ std::string BoundingBox::toString()
 {
 	std::string result = "[" + topLeft.toString() + ", " + bottomRight.toString() + "]";
 	return result;
+};
+
+// GET COORDINATES
+std::vector<Coordinate> BoundingBox::getCoordinates()
+{
+	std::vector<Coordinate> coordinates;
+
+	// top left
+	coordinates.push_back(this->topLeft);
+
+	// top right
+	Coordinate topRight(this->bottomRight.longitude, this->topLeft.latitude);
+	coordinates.push_back(topRight);
+
+	// bottom right
+	coordinates.push_back(bottomRight);
+
+	// bottom left
+	Coordinate bottomLeft(this->topLeft.longitude, this->bottomRight.latitude);
+	coordinates.push_back(bottomLeft);
+
+	return coordinates;
 };
 
 #endif

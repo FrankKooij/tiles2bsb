@@ -23,9 +23,11 @@ private:
 
 public:
 	Polygon(std::vector<Coordinate> coordinates);
+	Polygon(BoundingBox box);
 	inline Coordinate getCentroid();
-	inline std::vector<BoundingBox> getCoveringRectangles();
+	inline std::vector<BoundingBox> getCoveringRectangles(Polygon original);
 	inline std::vector<Coordinate> getCoordinates();
+	inline bool contains(BoundingBox box);
 };
 
 // CONSTRUCTOR
@@ -34,10 +36,53 @@ Polygon::Polygon(std::vector<Coordinate> coordinates)
 	this->coordinates = coordinates;
 };
 
+Polygon::Polygon(BoundingBox box) 
+{
+	this->coordinates = box.getCoordinates();
+};
+
 // GET COORDINATES
 inline std::vector<Coordinate> Polygon::getCoordinates()
 {
 	return this->coordinates;
+};
+
+inline bool Polygon::contains(Coordinate coord)
+{
+	int wn = 0; // the  winding number counter
+
+    // loop through all edges of the polygon
+    for (int i = 0; i < this->coordinates.size(); i++) // edge from V[i] to  V[i+1]
+    {   
+        if (this->coordinates[i].longitude <= coord.longitude) // start y <= P.y
+        {          
+            if (this->coordinates[i + 1].longitude  >  coord.longitude) // an upward crossing
+            {
+                if (coord.isLeft(this->coordinates[i], this->coordinates[i + 1]) > 0) // P left of  edge 
+                {
+                    ++wn; // have  a valid up intersect
+                }
+            }
+        }
+        else // start y > P.y (no test needed)
+       	{                        
+            if (this->coordinates[i + 1].longitude  <= coord.longitude) // a downward crossing 
+            {
+                if (coord.isLeft(this->coordinates[i], this->coordinates[i + 1]) < 0) // P right of  edge
+                {
+                    --wn; // have  a valid down intersect
+                }
+            }
+        }
+    }
+
+    return (wn == 1);
+};
+
+// CONTAINS
+inline bool Polygon::contains(BoundingBox box) 
+{
+
 };
 
 // GET CENTROID
@@ -91,7 +136,7 @@ inline Coordinate Polygon::getCentroid()
 };
 
 // GET COVERING RECTANGLES
-inline std::vector<BoundingBox> Polygon::getCoveringRectangles()
+inline std::vector<BoundingBox> Polygon::getCoveringRectangles(Polygon original)
 {
 	std::vector<BoundingBox> results;
 
