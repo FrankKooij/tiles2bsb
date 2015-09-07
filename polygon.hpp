@@ -62,7 +62,7 @@ inline bool Polygon::contains(Coordinate coord)
             {
                 if (coord.isLeft(this->coordinates[i], this->coordinates[i + 1]) > 0) // P left of  edge 
                 {
-                    ++wn; // have  a valid up intersect
+                    ++wn; // have a valid up intersect
                 }
             }
         }
@@ -72,7 +72,7 @@ inline bool Polygon::contains(Coordinate coord)
             {
                 if (coord.isLeft(this->coordinates[i], this->coordinates[i + 1]) < 0) // P right of  edge
                 {
-                    --wn; // have  a valid down intersect
+                    --wn; // have a valid down intersect
                 }
             }
         }

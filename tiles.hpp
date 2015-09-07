@@ -153,7 +153,8 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	double exploreLeftLon = topLeft.longitude;
 	const double pumpingValue = 0.000001;
 	XY exploreLeftX;
-	do {
+	do
+	{
 		exploreLeftLon -= pumpingValue;
 		exploreLeftX = this->fromCoordinate(zoom, exploreLeftLon, topLeft.latitude);
 	}
@@ -162,7 +163,8 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	// explore top left latitude bound of tile
 	double exploreLeftLat = topLeft.latitude;
 	XY exploreLeftY;
-	do {
+	do 
+	{
 		exploreLeftLat += pumpingValue;
 		exploreLeftY = this->fromCoordinate(zoom, topLeft.longitude, exploreLeftLat);
 	}
@@ -171,7 +173,8 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	// explore bottom right longitude bound of tile
 	double exploreRightLon = bottomRight.longitude;
 	XY exploreRightX;
-	do {
+	do 
+	{
 		exploreRightLon += pumpingValue;
 		exploreRightX = this->fromCoordinate(zoom, exploreRightLon, bottomRight.latitude);
 	}
@@ -180,7 +183,8 @@ inline TilesResult Tiles::fromBoundingBox(int zoom, Coordinate topLeft, Coordina
 	// explore bottm right latitude bound of tile
 	double exploreRightLat = topLeft.latitude;
 	XY exploreRightY;
-	do {
+	do 
+	{
 		exploreRightLat -= pumpingValue;
 		exploreRightY = this->fromCoordinate(zoom, bottomRight.longitude, exploreRightLat);
 	}
