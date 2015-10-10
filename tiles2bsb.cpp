@@ -28,7 +28,9 @@
 
 Crayon GREY(FG_LIGHT_GRAY);
 Crayon DEFAULT(FG_DEFAULT);
+Crayon BLUE(FG_LIGHT_BLUE);
 Crayon GREEN(FG_GREEN);
+Crayon YELLOW(FG_YELLOW);
 Crayon RED(FG_RED);
 
 int main(int argc, char* argv[])
@@ -57,6 +59,7 @@ int main(int argc, char* argv[])
 	Fetch f;
 
 	std::vector<Polygon> polygons = gjson.parseFile(conf.geojsonPath);
+	std::cout << BLUE << "Polygons found: " << polygons.size() << DEFAULT << std::endl;
 
 	// loop all the available polygons
 	int j = 1;
@@ -66,7 +69,13 @@ int main(int argc, char* argv[])
 		std::cout << "========================" << std::endl;
 		std::cout << "Start processing of Polygon!" << std::endl;
 
-		std::vector<TilesResult> tileResults = tiles.fromPolygon(zoom, polyg, 4);
+		std::vector<TilesResult> tileResults = tiles.fromPolygon(zoom, polyg, 1);
+		std::cout << BLUE <<  "Rectangles found: " << tileResults.size() << DEFAULT << std::endl;
+
+		if(tileResults.size() == 0)
+		{
+			std::cout << YELLOW <<  "Keep in mind that only convex geojson polygon shapes are supported yet!" << DEFAULT << std::endl;
+		}
 
 		// loop all tile mapping results
 		for(auto tiles : tileResults)
@@ -89,36 +98,43 @@ int main(int argc, char* argv[])
 			e.Start();
 
 			// stitch images together
-			Image i;
-			bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png");
-			if(stitchResult == true) 
+			try
 			{
-				std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
+				Image i;
+				bool stitchResult = i.stitchTogether(tiles, zoom, "tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png");
+				if(stitchResult == true) 
+				{
+					std::cout << GREEN << "Image stitching ... OK" << DEFAULT << std::endl;
+				}
+				else 
+				{
+					std::cout << RED << "Image stitching ... ERROR" << DEFAULT << std::endl;
+				}
+
+				// display stats
+				double stitchingMs = e.End();
+				std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
+
+				e.Start();
+
+				BSB b;
+				bool bsbResult = b.fromPNG("tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
+				if(bsbResult == true) 
+				{
+					std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
+				}
+				else 
+				{
+					std::cout << RED << "BSB conversion ... ERROR" << DEFAULT << std::endl;
+				}
+
+				double bsbMs = e.End();
+				std::cout << GREY << "Converting to .kap file took " << bsbMs << "ms" << DEFAULT << std::endl;
 			}
-			else 
+			catch (std::exception& ex)
 			{
-				std::cout << RED << "Image stitching ... ERROR" << DEFAULT << std::endl;
+				std::cout << ex.what() << std::endl;
 			}
-
-			// display stats
-			double stitchingMs = e.End();
-			std::cout << GREY << "Stitching of " << tiles.coordinates.size() <<  " images ran " << stitchingMs << "ms" << DEFAULT << std::endl;
-
-			e.Start();
-
-			BSB b;
-			bool bsbResult = b.fromPNG("tiles/map_" + conf.name +  "_" + patches::to_string(j) + ".png", "maps/map_" + conf.name + "_" + patches::to_string(j) + ".kap", tiles.topLeftEdge, tiles.bottomRightEdge);
-			if(bsbResult == true) 
-			{
-				std::cout << GREEN << "BSB conversion ... OK" << DEFAULT << std::endl;
-			}
-			else 
-			{
-				std::cout << RED << "BSB conversion ... ERROR" << DEFAULT << std::endl;
-			}
-
-			double bsbMs = e.End();
-			std::cout << GREY << "Converting to .kap file took " << bsbMs << "ms" << DEFAULT << std::endl;
 
 			j++;
 		}
@@ -127,6 +143,5 @@ int main(int argc, char* argv[])
 	double totalMs = total.End();
 	std::cout << GREY << "Total runtime of tiles2bsb " << totalMs << "ms" << DEFAULT << std::endl;
 	
-
 	return 0;
 }
